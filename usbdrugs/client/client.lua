@@ -21,7 +21,6 @@ end)
 
 local hacking = false
 
-
 RegisterNetEvent('usbdrugs:used')
 AddEventHandler('usbdrugs:used', function()
   TriggerEvent('mhacking:show')
@@ -51,7 +50,6 @@ AddEventHandler('usbdrugs:collected', function()
   Wait(1500)
   ClearAllBlipRoutes()
 end)
-
 
 function mycb(success, timeremaining)
   if success then
@@ -104,8 +102,10 @@ function mycb2(success, timeremaining)
   if success then
     local ped = PlayerPedId()
     TriggerEvent('mhacking:hide')
-    exports['mythic_notify']:DoLongHudText ('success', 'System successfully hacked!')
     DoScreenFadeIn(1000)
+    Citizen.Wait(1000)
+    createped()
+    exports['mythic_notify']:DoLongHudText ('success', 'System successfully hacked!')
     Citizen.Wait(2000)
     exports['mythic_notify']:DoLongHudText ('inform', 'On your map you will find a location')
     Citizen.Wait(2000)
@@ -116,7 +116,6 @@ function mycb2(success, timeremaining)
     SetBlipColour(blip, 1)
     SetBlipRoute(blip, true)
     SetBlipRouteColour(blip, 5)
-    createped()
     hacking = false
   else
     print('Failed')
@@ -174,15 +173,24 @@ function createped()
       Citizen.Wait(500)
   end
 
+  RequestModel(hashKey2)
+  while not HasModelLoaded(hashKey2) do
+      RequestModel(hashKey2)
+      Citizen.Wait(500)
+  end
+
+  RequestModel(hashKey3)
+  while not HasModelLoaded(hashKey3) do
+      RequestModel(hashKey3)
+      Citizen.Wait(500)
+  end
+
   print('Spawning Peds?')
 
-  guard = CreatePed(pedType, hashKey,-1708.438, -1120.245, 12.45333, 0, 1, 1)
-  guard2 = CreatePed(pedType, hashKey,-1708.438, -1120.245, 12.45333, 1, 1, 1)
-  guard3 =  CreatePed(pedType, hashKey,-1708.438, -1120.245, 12.45333, 2, 1, 1)
+  guard = CreatePed(pedType, hashKey1,-1708.438, -1120.245, 12.45333, 0, 1, 1)
+  guard2 = CreatePed(pedType, hashKey2,-1708.438, -1120.245, 12.45333, 1, 1, 1)
+  guard3 =  CreatePed(pedType, hashKey3,-1708.438, -1120.245, 12.45333, 2, 1, 1)
 
---////////////
---  Guard 1
---///////////
 
   SetPedShootRate(guard,  750)
   SetPedCombatAttributes(guard, 46, true)
@@ -196,9 +204,6 @@ function createped()
   GiveWeaponToPed(guard, GetHashKey("WEAPON_SMG"), 5000, true, true)
   SetPedRelationshipGroupHash( guard, GetHashKey("HATES_PLAYER"))
 
-  --////////////
-  --  Guard 2
-  --///////////
   SetPedShootRate(guard2,  750)
   SetPedCombatAttributes(guard2, 46, true)
   SetPedFleeAttributes(guard2, 0, 0)
@@ -211,9 +216,6 @@ function createped()
   GiveWeaponToPed(guard2, GetHashKey("WEAPON_SMG"), 5000, true, true)
   SetPedRelationshipGroupHash( guard2, GetHashKey("HATES_PLAYER"))
 
-  --////////////
-  --  Guard3
-  --///////////
   SetPedShootRate(guard3,  750)
   SetPedCombatAttributes(guard3, 46, true)
   SetPedFleeAttributes(guard3, 0, 0)
